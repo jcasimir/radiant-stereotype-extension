@@ -54,7 +54,7 @@ To add stereotypes you need to add fields to the Radiant::Config table. There ar
 
 1.) Page Parts (and filters)
 
-The key has to look like: `stereotype.<name_of_the_stereotype>.parts` and the value `body:markdown,sidebar:textile`.
+The key has to look like: `stereotype.<name_of_the_stereotype>.parts` and the value `body:Markdown,sidebar:Textile`.
 
 2.) Layout
 
