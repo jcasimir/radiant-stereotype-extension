@@ -4,11 +4,19 @@ module Stereotype
     def self.included(base)
       base.extend ClassMethods
       base.class_eval do
-        class <<self
+        class << self
           alias_method_chain :new_with_defaults, :stereotype
         end
         after_save :update_custom_fields
         include InstanceMethods
+      end
+      
+      Admin::PagesController.class_eval do
+        def new
+          @page = self.model = model_class.new_with_defaults(config, params)
+          assign_page_attributes
+          response_for :new
+        end
       end
     end
     
@@ -31,10 +39,10 @@ module Stereotype
     end
     
     module ClassMethods
-      def new_with_defaults_with_stereotype(config = Radiant::Config)
+      def new_with_defaults_with_stereotype(config = Radiant::Config, params = nil)
         page = new
       
-        custom_field = CustomField.find(:first, :conditions => { :name => "stereotype", :page_id => page.parent_id})
+        custom_field = CustomField.find(:first, :conditions => { :name => "stereotype", :page_id => params['page_id']})
         name = custom_field && custom_field.value
       
         if name
